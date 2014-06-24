@@ -8,7 +8,7 @@ class dwqa_Latest_Question_Widget extends WP_Widget {
      * @return void
      **/
     function dwqa_Latest_Question_Widget() {
-        $widget_ops = array( 'classname' => 'dwqa-latest-question', 'description' => __('Show a list of questions that was ordered by views.','dwqa') );
+        $widget_ops = array( 'classname' => 'dwqa-widget dwqa-latest-questions', 'description' => __('Show a list of questions that was ordered by views.','dwqa') );
         $this->WP_Widget( 'dwqa-latest-question', __('DWQA Latest Questions','dwqa'), $widget_ops );
     }
 
@@ -25,7 +25,7 @@ class dwqa_Latest_Question_Widget extends WP_Widget {
         echo $after_title;
         
         $args = array(
-            'posts_per_page'       => $instance['number'],
+            'posts_per_page'    => $instance['number'],
             'order'             => 'DESC',
             'orderby'           => 'post_date',
             'post_type'         => 'dwqa-question',
@@ -37,7 +37,7 @@ class dwqa_Latest_Question_Widget extends WP_Widget {
             echo '<ul>';
             while ( $questions->have_posts() ) { $questions->the_post();
                 echo '
-				<li><a href="'.get_permalink().'" class="question-title">'.get_the_title().'</a> '.__('asked by','dwqa').' ' . get_the_author_link() . ", " .  human_time_diff( get_the_time('U'), current_time('timestamp') ) . ' ago';
+				<li><a href="'.get_permalink().'" class="question-title">'.get_the_title().'</a> '.__('asked by','dwqa').' ' . ( dwqa_is_anonymous( get_the_ID() ) ? __('Anonymous','dwqa') : get_the_author_link() ) . ", " .  human_time_diff( get_the_time('U'), current_time('timestamp') ) . ' ago';
 				'</li>';
             }   
             echo '</ul>';
